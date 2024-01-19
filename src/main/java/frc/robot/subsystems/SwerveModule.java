@@ -72,6 +72,7 @@ public class SwerveModule {
 
         /* Drive Motor Config */
         driveMotor = new CANSparkMax(moduleConstants.driveMotorID, com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
+        driveMotor.setInverted(true);
         driveEncoder = driveMotor.getEncoder();
         driveController = driveMotor.getPIDController();
         configDriveMotor();
@@ -136,9 +137,9 @@ public class SwerveModule {
     }
     
     private void configAngleEncoder(){        
-        angleEncoder.configFactoryDefault();
+        // angleEncoder.configFactoryDefault();
         CANCoderUtil.setCANCoderBusUsage(angleEncoder, CCUsage.kMinimal);
-        angleEncoder.configAllSettings(Robot.ctreConfigs.swerveCanCoderConfig);
+        // angleEncoder.configAllSettings(Robot.ctreConfigs.swerveCanCoderConfig);
     }
 
     private void configAngleMotor(){

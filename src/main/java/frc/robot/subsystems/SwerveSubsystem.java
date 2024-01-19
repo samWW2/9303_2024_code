@@ -32,7 +32,7 @@ public class SwerveSubsystem extends SubsystemBase {
   public SwerveSubsystem() {
     //instantiates new pigeon gyro, wipes it, and zeros it
     gyro = new AHRS(SPI.Port.kMXP);
-    gyro.configFactoryDefault();
+    // gyro.configFactoryDefault();
     zeroGyro();
 
     //Creates all four swerve modules into a swerve drive
