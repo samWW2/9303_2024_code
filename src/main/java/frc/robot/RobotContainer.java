@@ -35,11 +35,9 @@ public class RobotContainer {
   private final int strafeAxis = PS4Controller.Axis.kLeftX.value;
   private final int rotationAxis = PS4Controller.Axis.kRightX.value;
   
-  private final Trigger robotCentric =
-  new JoystickButton(m_XboxController,PS4Controller.Button.kSquare.value);
-
-  Trigger xButton = new JoystickButton(m_XboxController, PS4Controller.Button.kCross.value);
-  Trigger oButton = new JoystickButton(m_XboxController, PS4Controller.Button.kCircle.value);
+  private final Trigger robotCentric = new JoystickButton(m_XboxController,PS4Controller.Button.kSquare.value);
+  private final Trigger xButton = new JoystickButton(m_XboxController, PS4Controller.Button.kCross.value);
+  private final Trigger oButton = new JoystickButton(m_XboxController, PS4Controller.Button.kCircle.value);
 
 
 
@@ -64,7 +62,6 @@ public class RobotContainer {
           () -> -m_XboxController.getRawAxis(rotationAxis),
           () -> robotCentric.getAsBoolean()));
 
-    // Configure the trigger bindings
     configureBindings();
   }
 
@@ -77,6 +74,6 @@ public class RobotContainer {
 
  
   public Command getAutonomousCommand() {
-    return  null;
+    return null;
   }
 }

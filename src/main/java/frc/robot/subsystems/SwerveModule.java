@@ -23,7 +23,6 @@ import frc.lib.SwerveModuleConstants;
 import frc.lib.CANCoderUtil.CCUsage;
 import frc.lib.CANSparkMaxUtil.Usage;
 import frc.robot.Constants;
-import frc.robot.Robot;
 
 /** Add your docs here. */
 public class SwerveModule {
@@ -59,20 +58,16 @@ public class SwerveModule {
         this.m_angleKD = moduleConstants.angleKD;
         this.m_angleKFF = moduleConstants.angleKFF;
         angleOffset = moduleConstants.angleOffset;
-        //this.?
-        /* Angle Encoder Config */
+        
         angleEncoder = new CANcoder(moduleConstants.cancoderID);
         configAngleEncoder();
 
-        /* Angle Motor Config */
         angleMotor = new CANSparkMax(moduleConstants.angleMotorID, MotorType.kBrushless);
         integratedAngleEncoder = angleMotor.getEncoder();
         angleController = angleMotor.getPIDController();
         configAngleMotor();
 
-        /* Drive Motor Config */
         driveMotor = new CANSparkMax(moduleConstants.driveMotorID, com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
-        driveMotor.setInverted(true);
         driveEncoder = driveMotor.getEncoder();
         driveController = driveMotor.getPIDController();
         configDriveMotor();

@@ -14,6 +14,8 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -34,7 +36,7 @@ public class SwerveSubsystem extends SubsystemBase {
     gyro = new AHRS(SPI.Port.kMXP);
     // gyro.configFactoryDefault();
     zeroGyro();
-
+    
     //Creates all four swerve modules into a swerve drive
     mSwerveMods =
     new SwerveModule[] {
@@ -43,7 +45,7 @@ public class SwerveSubsystem extends SubsystemBase {
       new SwerveModule(2, Constants.SwerveConstants.Mod2.constants),
       new SwerveModule(3, Constants.SwerveConstants.Mod3.constants)
     };
-
+    
     //creates new swerve odometry (odometry is where the robot is on the field)
     swerveOdometry = new SwerveDriveOdometry(Constants.SwerveConstants.swerveKinematics, getYaw(), getPositions());
 
@@ -127,7 +129,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
   public Rotation2d getYaw() {
     //fancy if else loop again
-    return (Constants.SwerveConstants.invertPigeon)
+    return (Constants.SwerveConstants.invertNavx)
         ? Rotation2d.fromDegrees(360 - gyro.getYaw())
         : Rotation2d.fromDegrees(gyro.getYaw());
   }
@@ -168,16 +170,17 @@ public class SwerveSubsystem extends SubsystemBase {
         swerveOdometry.update(getYaw(), getPositions());
     field.setRobotPose(getPose());
 
-    SmartDashboard.putNumber("Pigeon Roll",  gyro.getPitch());
+    SmartDashboard.putNumber("gyro Roll",  gyro.getPitch());
 
     for (SwerveModule mod : mSwerveMods) {
       SmartDashboard.putNumber(
           "Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
       SmartDashboard.putNumber(
-          "Mod " + mod.moduleNumber + " Integrated", mod.getState().angle.getDegrees());
+          "Mod " + mod.moduleNumber + " Integrated Angle", mod.getState().angle.getDegrees());
       SmartDashboard.putNumber(
           "Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);
   }
 }
+
 
 }

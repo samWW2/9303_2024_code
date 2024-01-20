@@ -30,7 +30,6 @@ public class TeleopSwerve extends Command {
       DoubleSupplier strafeSupplier,
       DoubleSupplier rotationSupplier,
       BooleanSupplier robotCentricSupplier) {
-    // Use addRequirements() here to declare subsystem dependencies.
     this.m_SwerveSubsystem = SwerveSubsystem;
     addRequirements(m_SwerveSubsystem);
     this.m_translationSupplier = translationSupplier;
@@ -39,11 +38,9 @@ public class TeleopSwerve extends Command {
     this.m_robotCentricSupplier = robotCentricSupplier;
   }
 
-  // Called when the command is initially scheduled.
   @Override
   public void initialize() {}
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
         /* Get Values, applies Deadband, (doesnt do anything if stick is less than a value)*/

@@ -23,8 +23,7 @@ import frc.lib.SwerveModuleConstants;
 public final class Constants {
   public static final class SwerveConstants{
     public static final double inputDeadband = .1;
-    public static final int PIGEON_ID = 17; //tochange
-    public static final boolean invertPigeon = false;
+    public static final boolean invertNavx = false;
 
     /* Drivetrain Constants */
     public static final double trackWidth = Units.inchesToMeters(17.5);//to find
@@ -81,8 +80,8 @@ public final class Constants {
     public static final double maxAngularVelocity = 11.5; //what are these units?
 
     /* Neutral Modes */ 
-    public static final IdleMode angleNeutralMode = IdleMode.kBrake;
-    public static final IdleMode driveNeutralMode = IdleMode.kBrake;
+    public static final IdleMode angleNeutralMode = IdleMode.kCoast; //change to break
+    public static final IdleMode driveNeutralMode = IdleMode.kCoast; //change to break
 
     /* Motor Inverts */
     public static final boolean driveInvert = false;
