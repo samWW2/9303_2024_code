@@ -26,9 +26,9 @@ public final class Constants {
     public static final boolean invertNavx = false;
 
     /* Drivetrain Constants */
-    public static final double trackWidth = Units.inchesToMeters(17.5);//to find
-    public static final double wheelBase = Units.inchesToMeters(20.5);//to find
-    public static final double wheelDiameter = Units.inchesToMeters(4.0);
+    public static final double trackWidth = Units.inchesToMeters(22.835);//to find
+    public static final double wheelBase = Units.inchesToMeters(22.835);//to find
+    public static final double wheelDiameter = Units.inchesToMeters(3.937);
     public static final double wheelCircumference = wheelDiameter * Math.PI;
 
     public static final double openLoopRamp = 0.25;
@@ -36,7 +36,7 @@ public final class Constants {
 
     public static final double driveGearRatio = (6.75 / 1.0); // 6.75:1 L2 Mk4 Modules
     //L1 is 8.14:1, L2 is 6.75:1, L3 is 6.12:1, L4 is 5.14:1
-    public static final double angleGearRatio = (12.8 / 1.0); // 12.8:1 MK4 SDS Modules
+    public static final double angleGearRatio = ((150/7) / 1.0); // 12.8:1 MK4 SDS Modules
 
     public static final SwerveDriveKinematics swerveKinematics =
     new SwerveDriveKinematics(
@@ -92,12 +92,12 @@ public final class Constants {
     
 
         /* Module Specific Constants */
-    /* Front Left Module - Module 0 */
+    /* back right Module - Module 0 */
     public static final class Mod0 {
-      public static final int driveMotorID = 1; 
-      public static final int angleMotorID = 2; 
-      public static final int canCoderID = 9;
-      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(161.5);
+      public static final int driveMotorID = 5; 
+      public static final int angleMotorID = 6; 
+      public static final int canCoderID = 11;
+      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(180);
     /* Angle Motor PID Values */
       public static final double angleKP = 0.01; //to tune
       public static final double angleKI = 0.0; //to tune
@@ -109,12 +109,12 @@ public final class Constants {
           //creates a constant with all info from swerve module
     }
 
-    /* Front Right Module - Module 1 */
+    /* Front left Module - Module 1 */
     public static final class Mod1 {
-      public static final int driveMotorID = 7;
-      public static final int angleMotorID = 8;
-      public static final int canCoderID = 12;
-      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(150.4);
+      public static final int driveMotorID = 1;
+      public static final int angleMotorID = 2;
+      public static final int canCoderID = 9;
+      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(346.68); 
       /* Angle Motor PID Values */
       public static final double angleKP = 0.01; //to tune
       public static final double angleKI = 0.0; //to tune
@@ -131,7 +131,7 @@ public final class Constants {
       public static final int driveMotorID = 3;
       public static final int angleMotorID = 4;
       public static final int canCoderID = 10;
-      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(43.6);
+      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(5); 
       /* Angle Motor PID Values */
       public static final double angleKP = 0.01; //to tune
       public static final double angleKI = 0.0; //to tune
@@ -143,12 +143,12 @@ public final class Constants {
         //creates a constant with all info from swerve module
     }
 
-    /* Back Right Module - Module 3 */
+    /* front right Module - Module 3 */
     public static final class Mod3 {
-      public static final int driveMotorID = 5;
-      public static final int angleMotorID = 6;
-      public static final int canCoderID = 11 ;
-      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(140.71);
+      public static final int driveMotorID = 7;
+      public static final int angleMotorID = 8;
+      public static final int canCoderID = 12 ;
+      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(7.56);
         /* Angle Motor PID Values */
       public static final double angleKP = 0.01; //to tune
       public static final double angleKI = 0.0; //to tune
