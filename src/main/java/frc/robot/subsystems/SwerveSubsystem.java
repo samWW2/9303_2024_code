@@ -37,7 +37,7 @@ public class SwerveSubsystem extends SubsystemBase {
     // gyro.configFactoryDefault();
     zeroGyro();
     
-    //Creates all four swerve modules into a swerve drive
+    
     mSwerveMods =
     new SwerveModule[] {
       new SwerveModule(Constants.SwerveConstants.FrontRightMod.moudleId, Constants.SwerveConstants.FrontRightMod.constants),
@@ -46,7 +46,7 @@ public class SwerveSubsystem extends SubsystemBase {
       new SwerveModule(Constants.SwerveConstants.BackLeftMod.moudleId, Constants.SwerveConstants.BackLeftMod.constants) 
     };
     
-    //creates new swerve odometry (odometry is where the robot is on the field)
+
     swerveOdometry = new SwerveDriveOdometry(Constants.SwerveConstants.swerveKinematics, getYaw(), getPositions());
 
     //puts out the field
@@ -54,25 +54,44 @@ public class SwerveSubsystem extends SubsystemBase {
     SmartDashboard.putData("Field", field);
   }
 
-  public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop)
-  //takes the coordinate on field wants to go to, the rotation of it, whether or not in field relative mode, and if in open loop control
+  public ChassisSpeeds CalcChassissSpeed(Translation2d translation, double rotation, boolean fieldRelative)
   {
-    SwerveModuleState[] swerveModuleStates =
-      Constants.SwerveConstants.swerveKinematics.toSwerveModuleStates(
-          //fancy way to do an if else statement 
-          //if field relative == true, use field relative stuff, otherwise use robot centric
-          fieldRelative
-              ? ChassisSpeeds.fromFieldRelativeSpeeds(
-                  translation.getX(), translation.getY(), rotation, getYaw())
-              : new ChassisSpeeds(translation.getX(), translation.getY(), rotation));
-  //sets to top speed if above top speed
-  SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.SwerveConstants.maxSpeed);
-
-  //set states for all 4 modules
-  for (SwerveModule mod : mSwerveMods) {
-    mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
+    if(fieldRelative)
+    {
+      return ChassisSpeeds.fromFieldRelativeSpeeds(
+        translation.getX(),
+        translation.getY(),
+        rotation, getYaw()
+        );
+    }
+    return new ChassisSpeeds(
+      translation.getX(),
+      translation.getY(),
+      rotation
+      );
+    
   }
-}
+
+  public SwerveModuleState[] ModuleSpeedsToSates(ChassisSpeeds speed) {
+    SwerveModuleState[] states =  Constants.SwerveConstants.swerveKinematics.toSwerveModuleStates(speed);
+    SwerveDriveKinematics.desaturateWheelSpeeds(states, Constants.SwerveConstants.maxSpeed);
+    return states;
+  }
+
+
+  public void runMoudles(SwerveModuleState[] states, boolean isOpenLoop) {
+    for (SwerveModule mod : mSwerveMods) {
+    mod.setDesiredState(states[mod.moduleNumber], isOpenLoop);
+    }
+  }
+
+  public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop)
+  {
+    ChassisSpeeds chassisSpeeds = CalcChassissSpeed(translation, rotation, fieldRelative);
+    SwerveModuleState[] states = ModuleSpeedsToSates(chassisSpeeds);
+    runMoudles(states, isOpenLoop);
+  }
+
 
   /* Used by SwerveControllerCommand in Auto */
   public void setModuleStates(SwerveModuleState[] desiredStates) {
@@ -139,8 +158,7 @@ public class SwerveSubsystem extends SubsystemBase {
     double balance_kp = -.005;//Variable muliplied by roll_error
     double position_adjust = 0.0;
     double min_command = 0.0;//adds a minimum input to the motors to overcome friction if the position adjust isn't enough
-    if (roll_error > 6.0)
-    {
+    if (roll_error > 6.0) {
       position_adjust = balance_kp * roll_error + min_command;//equation that figures out how fast it should go to adjust
       //position_adjust = Math.max(Math.min(position_adjust,.15), -.15);  this gets the same thing done in one line
       if (position_adjust > .1){position_adjust = .1;}
@@ -149,8 +167,7 @@ public class SwerveSubsystem extends SubsystemBase {
       
       return false;
     }
-    else if (roll_error < -6.0)
-    {
+    else if (roll_error < -6.0) {
       position_adjust = balance_kp * roll_error - min_command;
       drive(new Translation2d(position_adjust, 0), 0.0, true, false);
       if (position_adjust > .3){position_adjust = .3;}
