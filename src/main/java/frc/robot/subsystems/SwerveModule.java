@@ -69,6 +69,7 @@ public class SwerveModule {
 
         driveMotor = new CANSparkMax(moduleConstants.driveMotorID, com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
         driveEncoder = driveMotor.getEncoder();
+        
         driveController = driveMotor.getPIDController();
         configDriveMotor();
 

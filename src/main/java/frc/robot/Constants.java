@@ -91,30 +91,33 @@ public final class Constants {
     public static final boolean canCoderInvert = false;
     
 
-        /* Module Specific Constants */
-    /* back right Module - Module 0 */
-    public static final class Mod0 {
-      public static final int driveMotorID = 5; 
-      public static final int angleMotorID = 6; 
-      public static final int canCoderID = 11;
-      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(180);
-    /* Angle Motor PID Values */
-      public static final double angleKP = 0.01; //to tune
-      public static final double angleKI = 0.0; //to tune
-      public static final double angleKD = 0.0; //to tune
-      public static final double angleKFF = 0.0; //to tune
+   
+
+    public static final class FrontLeftMod {
+      public static final int moudleId = 1;
+      public static final int driveMotorID = 1; 
+      public static final int angleMotorID = 2; 
+      public static final int canCoderID = 9;
+      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(0);
+    
+      /* Angle Motor PID Values */
+      public static final double angleKP = 0.01; 
+      public static final double angleKI = 0.0; 
+      public static final double angleKD = 0.0; 
+      public static final double angleKFF = 0.0; 
     
       public static final SwerveModuleConstants constants =
           new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset, angleKP, angleKI, angleKD, angleKFF);
           //creates a constant with all info from swerve module
     }
 
-    /* Front left Module - Module 1 */
-    public static final class Mod1 {
-      public static final int driveMotorID = 1;
-      public static final int angleMotorID = 2;
-      public static final int canCoderID = 9;
-      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(346.68); 
+    /* Front right Module - Module 1 */
+    public static final class FrontRightMod {
+      public static final int moudleId = 0;
+      public static final int driveMotorID = 7;
+      public static final int angleMotorID = 8;
+      public static final int canCoderID = 12;
+      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(180);
       /* Angle Motor PID Values */
       public static final double angleKP = 0.01; //to tune
       public static final double angleKI = 0.0; //to tune
@@ -126,12 +129,13 @@ public final class Constants {
           //creates a constant with all info from swerve module
     }
 
-    /* Back Left Module - Module 2 */
-    public static final class Mod2 {
+    /* Back left Module - Module 2 */
+    public static final class BackLeftMod {
+      public static final int moudleId = 3;
       public static final int driveMotorID = 3;
       public static final int angleMotorID = 4;
       public static final int canCoderID = 10;
-      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(5); 
+      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(0); 
       /* Angle Motor PID Values */
       public static final double angleKP = 0.01; //to tune
       public static final double angleKI = 0.0; //to tune
@@ -143,12 +147,13 @@ public final class Constants {
         //creates a constant with all info from swerve module
     }
 
-    /* front right Module - Module 3 */
-    public static final class Mod3 {
-      public static final int driveMotorID = 7;
-      public static final int angleMotorID = 8;
-      public static final int canCoderID = 12 ;
-      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(7.56);
+    /* back right Module - Module 3 */
+    public static final class BackRightMod {
+      public static final int moudleId = 2;
+      public static final int driveMotorID = 5;
+      public static final int angleMotorID = 6;
+      public static final int canCoderID = 11 ;
+      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(180);
         /* Angle Motor PID Values */
       public static final double angleKP = 0.01; //to tune
       public static final double angleKI = 0.0; //to tune
@@ -159,7 +164,7 @@ public final class Constants {
           new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset, angleKP, angleKI, angleKD, angleKFF);
           //creates a constant with all info from swerve module
     }
-  
+    
 
     public static final boolean angleMotorInvert = false;
     public static final boolean driveMotorInvert = false;

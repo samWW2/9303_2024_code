@@ -40,10 +40,10 @@ public class SwerveSubsystem extends SubsystemBase {
     //Creates all four swerve modules into a swerve drive
     mSwerveMods =
     new SwerveModule[] {
-      new SwerveModule(0, Constants.SwerveConstants.Mod0.constants),
-      new SwerveModule(1, Constants.SwerveConstants.Mod1.constants), 
-      new SwerveModule(2, Constants.SwerveConstants.Mod2.constants), 
-      new SwerveModule(3, Constants.SwerveConstants.Mod3.constants) 
+      new SwerveModule(Constants.SwerveConstants.FrontRightMod.moudleId, Constants.SwerveConstants.FrontRightMod.constants),
+      new SwerveModule(Constants.SwerveConstants.FrontLeftMod.moudleId, Constants.SwerveConstants.FrontLeftMod.constants), 
+      new SwerveModule(Constants.SwerveConstants.BackRightMod.moudleId, Constants.SwerveConstants.BackRightMod.constants), 
+      new SwerveModule(Constants.SwerveConstants.BackLeftMod.moudleId, Constants.SwerveConstants.BackLeftMod.constants) 
     };
     
     //creates new swerve odometry (odometry is where the robot is on the field)
