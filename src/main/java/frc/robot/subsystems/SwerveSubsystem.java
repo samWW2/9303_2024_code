@@ -40,10 +40,10 @@ public class SwerveSubsystem extends SubsystemBase {
     //Creates all four swerve modules into a swerve drive
     mSwerveMods =
     new SwerveModule[] {
-      new SwerveModule(0, Constants.SwerveConstants.Mod0.constants),
-      new SwerveModule(1, Constants.SwerveConstants.Mod1.constants),
-      new SwerveModule(2, Constants.SwerveConstants.Mod2.constants),
-      new SwerveModule(3, Constants.SwerveConstants.Mod3.constants)
+      new SwerveModule(0, Constants.SwerveConstants.Mod1.constants),
+      new SwerveModule(1, Constants.SwerveConstants.Mod0.constants),
+      new SwerveModule(2, Constants.SwerveConstants.Mod3.constants),
+      new SwerveModule(3, Constants.SwerveConstants.Mod2.constants)
     };
     
     //creates new swerve odometry (odometry is where the robot is on the field)
@@ -64,7 +64,7 @@ public class SwerveSubsystem extends SubsystemBase {
           fieldRelative
               ? ChassisSpeeds.fromFieldRelativeSpeeds(
                   translation.getX(), translation.getY(), rotation, getYaw())
-              : new ChassisSpeeds(translation.getX(), translation.getY(), rotation));
+              : new ChassisSpeeds(-translation.getX(), translation.getY(), rotation));
   //sets to top speed if above top speed
   SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.SwerveConstants.maxSpeed);
 
