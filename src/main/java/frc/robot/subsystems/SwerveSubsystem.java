@@ -36,7 +36,6 @@ public class SwerveSubsystem extends SubsystemBase {
     gyro = new AHRS(SPI.Port.kMXP);
     // gyro.configFactoryDefault();
     zeroGyro();
-    
     //Creates all four swerve modules into a swerve drive
     mSwerveMods =
     new SwerveModule[] {
