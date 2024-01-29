@@ -16,6 +16,8 @@ import frc.robot.subsystems.SwerveSubsystem;
 
 
 import edu.wpi.first.wpilibj.PS4Controller;
+import edu.wpi.first.wpilibj.PS5Controller;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 
@@ -25,25 +27,18 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   
 
-  // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final PS4Controller  m_XboxController = new PS4Controller (0);
-  //private final CommandJoystick m_JoystickL = new CommandJoystick(0);
-  //private final CommandJoystick m_JoystickR = new CommandJoystick(1);
+  private final PS5Controller m_PS5Controller = new PS5Controller(0);
+
 
   /* Drive Controls */
   private final int translationAxis = PS4Controller.Axis.kLeftY.value;
   private final int strafeAxis = PS4Controller.Axis.kLeftX.value;
   private final int rotationAxis = PS4Controller.Axis.kRightX.value;
   
-  private final Trigger robotCentric = new JoystickButton(m_XboxController,PS4Controller.Button.kSquare.value);
-  private final Trigger xButton = new JoystickButton(m_XboxController, PS4Controller.Button.kCross.value);
-  private final Trigger oButton = new JoystickButton(m_XboxController, PS4Controller.Button.kCircle.value);
+  private final Trigger robotCentric = new JoystickButton(m_PS5Controller,PS4Controller.Button.kSquare.value);
+  private final Trigger xButton = new JoystickButton(m_PS5Controller, PS4Controller.Button.kCross.value);
+  private final Trigger oButton = new JoystickButton(m_PS5Controller, PS4Controller.Button.kCircle.value);
 
-
-
-  /*private final int translationAxis = Joystick.AxisType.kY.value; //left flight stick
-  private final int strafeAxis = Joystick.AxisType.kX.value; //left flight stick
-  private final int rotationAxis = Joystick.AxisType.kX.value; //right flight stick*/
 
   /* Subsystems */
   private final SwerveSubsystem m_SwerveSubsystem = new SwerveSubsystem();
@@ -57,9 +52,9 @@ public class RobotContainer {
     m_SwerveSubsystem.setDefaultCommand(
       new TeleopSwerve(
           m_SwerveSubsystem,
-          () -> -m_XboxController.getRawAxis(translationAxis),
-          () -> -m_XboxController.getRawAxis(strafeAxis),
-          () -> -m_XboxController.getRawAxis(rotationAxis),
+          () -> -m_PS5Controller.getRawAxis(translationAxis),
+          () -> -m_PS5Controller.getRawAxis(strafeAxis),
+          () -> -m_PS5Controller.getRawAxis(rotationAxis),
           () -> robotCentric.getAsBoolean()));
 
     configureBindings();

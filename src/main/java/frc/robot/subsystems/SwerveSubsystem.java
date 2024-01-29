@@ -14,8 +14,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -36,6 +34,7 @@ public class SwerveSubsystem extends SubsystemBase {
     gyro = new AHRS(SPI.Port.kMXP);
     // gyro.configFactoryDefault();
     zeroGyro();
+    
     //Creates all four swerve modules into a swerve drive
     mSwerveMods =
     new SwerveModule[] {
@@ -58,11 +57,9 @@ public class SwerveSubsystem extends SubsystemBase {
   {
     SwerveModuleState[] swerveModuleStates =
       Constants.SwerveConstants.swerveKinematics.toSwerveModuleStates(
-          //fancy way to do an if else statement 
-          //if field relative == true, use field relative stuff, otherwise use robot centric
           fieldRelative
               ? ChassisSpeeds.fromFieldRelativeSpeeds(
-                  translation.getX(), translation.getY(), rotation, getYaw())
+                  -translation.getX(), translation.getY(), rotation, getYaw())
               : new ChassisSpeeds(-translation.getX(), translation.getY(), rotation));
   //sets to top speed if above top speed
   SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.SwerveConstants.maxSpeed);
@@ -130,7 +127,7 @@ public class SwerveSubsystem extends SubsystemBase {
     //fancy if else loop again
     return (Constants.SwerveConstants.invertNavx)
         ? Rotation2d.fromDegrees(360 - gyro.getYaw())
-        : Rotation2d.fromDegrees(gyro.getYaw());
+        : Rotation2d.fromDegrees(gyro.getYaw() + Constants.SwerveConstants.degreesOffSet);
   }
 
   public boolean AutoBalance(){
@@ -169,7 +166,7 @@ public class SwerveSubsystem extends SubsystemBase {
         swerveOdometry.update(getYaw(), getPositions());
     field.setRobotPose(getPose());
 
-    SmartDashboard.putNumber("gyro Roll",  gyro.getPitch());
+    SmartDashboard.putNumber("gyro yaw",  getYaw().getDegrees());
 
     for (SwerveModule mod : mSwerveMods) {
       SmartDashboard.putNumber(

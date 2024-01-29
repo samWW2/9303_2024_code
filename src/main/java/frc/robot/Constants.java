@@ -22,6 +22,18 @@ import frc.lib.SwerveModuleConstants;
  */
 public final class Constants {
   public static final class SwerveConstants{
+
+    public static final double degreesOffSet = 158.7;
+
+    private static final double mod0OffSet = -360 * 0;
+    private static final double mod1OffSet = -360 * 0;
+    private static final double mod2OffSet = -360 * 0;
+    private static final double mod3OffSet = -360 * 0;
+
+
+
+
+
     public static final double inputDeadband = .1;
     public static final boolean invertNavx = false;
 
@@ -97,7 +109,7 @@ public final class Constants {
       public static final int driveMotorID = 1; 
       public static final int angleMotorID = 2; 
       public static final int canCoderID = 9;
-      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(0);
+      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(mod0OffSet);
     /* Angle Motor PID Values */
       public static final double angleKP = 0.01; //to tune
       public static final double angleKI = 0.0; //to tune
@@ -114,7 +126,7 @@ public final class Constants {
       public static final int driveMotorID = 7;
       public static final int angleMotorID = 8;
       public static final int canCoderID = 12;
-      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(0);
+      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(mod1OffSet);
       /* Angle Motor PID Values */
       public static final double angleKP = 0.01; //to tune
       public static final double angleKI = 0.0; //to tune
@@ -131,7 +143,7 @@ public final class Constants {
       public static final int driveMotorID = 3;
       public static final int angleMotorID = 4;
       public static final int canCoderID = 10;
-      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(0);
+      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(mod2OffSet);
       /* Angle Motor PID Values */
       public static final double angleKP = 0.01; //to tune
       public static final double angleKI = 0.0; //to tune
@@ -148,7 +160,7 @@ public final class Constants {
       public static final int driveMotorID = 5;
       public static final int angleMotorID = 6;
       public static final int canCoderID = 11 ;
-      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(0);
+      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(mod3OffSet);
         /* Angle Motor PID Values */
       public static final double angleKP = 0.01; //to tune
       public static final double angleKI = 0.0; //to tune
