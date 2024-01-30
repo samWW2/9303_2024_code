@@ -111,7 +111,7 @@ public final class Constants {
       public static final int canCoderID = 9;
       public static final Rotation2d angleOffset = Rotation2d.fromDegrees(mod0OffSet);
     /* Angle Motor PID Values */
-      public static final double angleKP = 0.015; //to tune
+      public static final double angleKP = 0.01; //to tune
       public static final double angleKI = 0.0; //to tune
       public static final double angleKD = 0.0; //to tune
       public static final double angleKFF = 0.0; //to tune
@@ -128,7 +128,7 @@ public final class Constants {
       public static final int canCoderID = 12;
       public static final Rotation2d angleOffset = Rotation2d.fromDegrees(mod1OffSet);
       /* Angle Motor PID Values */
-      public static final double angleKP = 0.015; //to tune
+      public static final double angleKP = 0.01; //to tune
       public static final double angleKI = 0.0; //to tune
       public static final double angleKD = 0.0; //to tune
       public static final double angleKFF = 0.0; //to tune
@@ -145,7 +145,7 @@ public final class Constants {
       public static final int canCoderID = 10;
       public static final Rotation2d angleOffset = Rotation2d.fromDegrees(mod2OffSet);
       /* Angle Motor PID Values */
-      public static final double angleKP = 0.015; //to tune
+      public static final double angleKP = 0.01; //to tune
       public static final double angleKI = 0.0; //to tune
       public static final double angleKD = 0.0; //to tune
       public static final double angleKFF = 0.0; //to tune
@@ -162,7 +162,7 @@ public final class Constants {
       public static final int canCoderID = 11 ;
       public static final Rotation2d angleOffset = Rotation2d.fromDegrees(mod3OffSet);
         /* Angle Motor PID Values */
-      public static final double angleKP = 0.015; //to tune
+      public static final double angleKP = 0.01; //to tune
       public static final double angleKI = 0.0; //to tune
       public static final double angleKD = 0.0; //to tune
       public static final double angleKFF = 0.0; //to tune

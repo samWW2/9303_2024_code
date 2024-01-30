@@ -4,6 +4,9 @@
 
 package frc.robot.subsystems;
 
+import org.littletonrobotics.junction.AutoLogOutput;
+import org.littletonrobotics.junction.Logger;
+
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -77,9 +80,10 @@ public class SwerveSubsystem extends SubsystemBase {
     for (SwerveModule mod : mSwerveMods) {
       mod.setDesiredState(desiredStates[mod.moduleNumber], false);
     }
+    
   }
 
-
+  @AutoLogOutput(key="Odometry/Robot")
   public Pose2d getPose() {
     return swerveOdometry.getPoseMeters();
   }
@@ -101,7 +105,7 @@ public class SwerveSubsystem extends SubsystemBase {
     });
   }
 
-
+  @AutoLogOutput
   public SwerveModuleState[] getStates() {
     SwerveModuleState[] states = new SwerveModuleState[4];
     for (SwerveModule mod : mSwerveMods) {
@@ -110,6 +114,7 @@ public class SwerveSubsystem extends SubsystemBase {
     return states;
   }
 
+  @AutoLogOutput
   public SwerveModulePosition[] getPositions(){
     SwerveModulePosition[] positions = new SwerveModulePosition[4];
     for(SwerveModule mod : mSwerveMods){
@@ -123,6 +128,7 @@ public class SwerveSubsystem extends SubsystemBase {
     gyro.zeroYaw();
   }
 
+  @AutoLogOutput
   public Rotation2d getYaw() {
     //fancy if else loop again
     return (Constants.SwerveConstants.invertNavx)
@@ -165,9 +171,10 @@ public class SwerveSubsystem extends SubsystemBase {
   public void periodic() {
         swerveOdometry.update(getYaw(), getPositions());
     field.setRobotPose(getPose());
-
+    
+    Logger.recordOutput("yaw", getYaw().getDegrees());
     SmartDashboard.putNumber("gyro yaw",  getYaw().getDegrees());
-
+    
     for (SwerveModule mod : mSwerveMods) {
       SmartDashboard.putNumber(
           "Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
