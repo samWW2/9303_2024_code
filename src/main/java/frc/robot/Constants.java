@@ -23,7 +23,7 @@ import frc.lib.SwerveModuleConstants;
 public final class Constants {
   public static final class SwerveConstants{
 
-    public static final double degreesOffSet = 158.7;
+    public static final double degreesOffSet = -180;
 
     private static final double mod0OffSet = -360 * 0;
     private static final double mod1OffSet = -360 * 0;
@@ -88,12 +88,12 @@ public final class Constants {
     public static final double angleConversionFactor = 360.0 / angleGearRatio;
 
     /* Swerve Profiling Values */
-    public static final double maxSpeed = 9; // meters per second
-    public static final double maxAngularVelocity = 11.5; //what are these units?
+    public static final double maxSpeed = 0.2; // meters per second //9
+    public static final double maxAngularVelocity = 0.35; //what are these units? //11.5
 
     /* Neutral Modes */ 
-    public static final IdleMode angleNeutralMode = IdleMode.kCoast; //change to break
-    public static final IdleMode driveNeutralMode = IdleMode.kCoast; //change to break
+    public static final IdleMode angleNeutralMode = IdleMode.kBrake; //change to break
+    public static final IdleMode driveNeutralMode = IdleMode.kBrake; //change to break
 
     /* Motor Inverts */
     public static final boolean driveInvert = false;

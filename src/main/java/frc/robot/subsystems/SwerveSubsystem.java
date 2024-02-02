@@ -130,6 +130,12 @@ public class SwerveSubsystem extends SubsystemBase {
         : Rotation2d.fromDegrees(gyro.getYaw() + Constants.SwerveConstants.degreesOffSet);
   }
 
+  public void resetAll(){
+    for (SwerveModule mod : mSwerveMods) {
+    mod.resetToAbsolute();
+  }
+  }
+
   public boolean AutoBalance(){
     double roll_error = gyro.getPitch();//the angle of the robot
     double balance_kp = -.005;//Variable muliplied by roll_error
