@@ -14,8 +14,10 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.SwerveSubsystem;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.PathPlannerPath;
 
-import edu.wpi.first.wpilibj.PS5Controller;
 import edu.wpi.first.wpilibj.PS5Controller;
 
 
@@ -70,6 +72,7 @@ public class RobotContainer {
 
  
   public Command getAutonomousCommand() {
-    return null;
+    PathPlannerPath path = PathPlannerPath.fromPathFile("New Path");
+    return AutoBuilder.followPath(path);
   }
 }
