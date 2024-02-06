@@ -14,7 +14,37 @@
         {
           "type": "path",
           "data": {
-            "pathName": "New Path"
+            "pathName": "Drive Back"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Drive Forward"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Right Ring"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Right RingDB"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left Ring"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left RingDB"
           }
         }
       ]

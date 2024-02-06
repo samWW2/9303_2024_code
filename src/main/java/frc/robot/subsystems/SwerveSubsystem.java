@@ -61,11 +61,11 @@ public class SwerveSubsystem extends SubsystemBase {
             this::getPose, // Robot pose supplier
             this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
             this::getSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-            this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+            this::drive, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
             new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-                    new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
-                    new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
-                    4.5, // Max module speed, in m/s
+                    new PIDConstants(4.0, 0.0, 0.05), // Translation PID constants
+                    new PIDConstants(0.24, 0.0, 0.0), // Rotation PID constants
+                    3, // Max module speed, in m/s
                     0.4, // Drive base radius in meters. Distance from robot center to furthest module.
                     new ReplanningConfig() // Default path replanning config. See the API for the options here
             ),
@@ -76,7 +76,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
               var alliance = DriverStation.getAlliance();
               if (alliance.isPresent()) {
-                return alliance.get() == DriverStation.Alliance.Red;
+                return alliance.get() == DriverStation.Alliance.Blue;
               }
               return false;
             },
@@ -124,8 +124,19 @@ public class SwerveSubsystem extends SubsystemBase {
     return Constants.SwerveConstants.swerveKinematics.toChassisSpeeds(getStates());
   }
 
-  public void driveRobotRelative(ChassisSpeeds robotRelativeSpeeds) {
-    ChassisSpeeds targetSpeeds = ChassisSpeeds.discretize(robotRelativeSpeeds, 0.02);
+  public void drive(ChassisSpeeds targetSpeed)
+  // takes the coordinate on field wants to go to, the rotation of it, whether or
+  // not in field relative mode, and if in open loop control
+  {
+    SwerveModuleState[] swerveModuleStates = Constants.SwerveConstants.swerveKinematics.toSwerveModuleStates(targetSpeed,
+        new Translation2d());
+    // sets to top speed if above top speed
+    SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.SwerveConstants.maxSpeed);
+
+    // set states for all 4 modules
+    for (SwerveModule mod : mSwerveMods) {
+      mod.setDesiredState(swerveModuleStates[mod.moduleNumber], false);// MIGHT NEED TO CHANGE
+    }
   }
   public void setWheelsToX() {
     setModuleStates(new SwerveModuleState[] {

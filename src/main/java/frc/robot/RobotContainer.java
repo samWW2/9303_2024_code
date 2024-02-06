@@ -72,7 +72,10 @@ public class RobotContainer {
 
  
   public Command getAutonomousCommand() {
-    PathPlannerPath path = PathPlannerPath.fromPathFile("New Path");
+    PathPlannerPath path = PathPlannerPath.fromPathFile("Copy of Drive Back");
+    m_SwerveSubsystem.resetOdometry(path.getPreviewStartingHolonomicPose());
     return AutoBuilder.followPath(path);
+    // m_SwerveSubsystem.resetOdometry(PathPlannerAuto.getStaringPoseFromAutoFile("New Auto"));
+    // return AutoBuilder.buildAuto("New Auto");
   }
 }
