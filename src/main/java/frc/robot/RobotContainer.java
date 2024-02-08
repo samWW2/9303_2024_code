@@ -16,20 +16,42 @@ import frc.robot.subsystems.SwerveSubsystem;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.wpilibj.PS5Controller;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 
 
 
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
-  
 
+  private Command Auto1(){
+    m_SwerveSubsystem.resetOdometry(PathPlannerAuto.getStaringPoseFromAutoFile("Auto 1"));
+    return AutoBuilder.buildAuto("Auto 1");
+  }
+   private Command Auto2(){
+    m_SwerveSubsystem.resetOdometry(PathPlannerAuto.getStaringPoseFromAutoFile("Auto 2"));
+    return AutoBuilder.buildAuto("Auto 2");
+  }
+   private Command Auto3(){
+    m_SwerveSubsystem.resetOdometry(PathPlannerAuto.getStaringPoseFromAutoFile("Auto 3"));
+    return AutoBuilder.buildAuto("Auto 3");
+  }
+   private Command Auto4(){
+    m_SwerveSubsystem.resetOdometry(PathPlannerAuto.getStaringPoseFromAutoFile("Auto 4"));
+    return AutoBuilder.buildAuto("Auto 4");
+  }
+   private Command Auto5(){
+    m_SwerveSubsystem.resetOdometry(PathPlannerAuto.getStaringPoseFromAutoFile("Auto 5"));
+    return AutoBuilder.buildAuto("Auto 5");
+  }
+  public Command NullAuto(){
+    return null;
+  }
+  private SendableChooser<Command> chooser = new SendableChooser<>();
   private final PS5Controller m_PS5Controller = new PS5Controller(0);
-
 
   /* Drive Controls */
   private final int translationAxis = PS5Controller.Axis.kLeftY.value;
@@ -39,7 +61,6 @@ public class RobotContainer {
   private final Trigger robotCentric = new JoystickButton(m_PS5Controller,PS5Controller.Button.kSquare.value);
   private final Trigger xButton = new JoystickButton(m_PS5Controller, PS5Controller.Button.kCross.value);
   private final Trigger oButton = new JoystickButton(m_PS5Controller, PS5Controller.Button.kCircle.value);
-  private final Trigger touchpad = new JoystickButton(m_PS5Controller, PS5Controller.Button.kTouchpad.value);
 
 
   /* Subsystems */
@@ -66,16 +87,21 @@ public class RobotContainer {
   private void configureBindings() {
     oButton.onTrue(new InstantCommand(() -> m_SwerveSubsystem.zeroGyro()));
     xButton.onTrue(new InstantCommand(() -> m_SwerveSubsystem.setWheelsToX()));
-    // touchpad.onTrue(new InstantCommand(() -> m_SwerveSubsystem.resetAll()));
+    chooser.setDefaultOption("no auto", NullAuto());
+    chooser.addOption("Auto 1", Auto1());
+    chooser.addOption("Auto 2", Auto2());
+    chooser.addOption("Auto 3", Auto3());
+    chooser.addOption("Auto 4", Auto4());
+    chooser.addOption("Auto 5", Auto5());
+    SmartDashboard.putData(chooser);
    
   }
 
  
   public Command getAutonomousCommand() {
-    PathPlannerPath path = PathPlannerPath.fromPathFile("Copy of Drive Back");
-    m_SwerveSubsystem.resetOdometry(path.getPreviewStartingHolonomicPose());
-    return AutoBuilder.followPath(path);
-    // m_SwerveSubsystem.resetOdometry(PathPlannerAuto.getStaringPoseFromAutoFile("New Auto"));
-    // return AutoBuilder.buildAuto("New Auto");
+    // PathPlannerPath path = PathPlannerPath.fromPathFile("Back Left 45");
+    // m_SwerveSubsystem.resetOdometry(path.getPreviewStartingHolonomicPose());
+    // return AutoBuilder.followPath(path);
+    return chooser.getSelected();
   }
 }

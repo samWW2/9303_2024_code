@@ -23,7 +23,7 @@ import frc.lib.SwerveModuleConstants;
 public final class Constants {
   public static final class SwerveConstants{
 
-    public static final double degreesOffSet = 0;
+    public static final double degreesOffSet = -11;
 
     private static final double mod0OffSet = -360 * 0;
     private static final double mod1OffSet = -360 * 0;
