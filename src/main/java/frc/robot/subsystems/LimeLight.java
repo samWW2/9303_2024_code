@@ -14,6 +14,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
 
 public class LimeLight extends SubsystemBase {
 
@@ -30,7 +31,6 @@ public class LimeLight extends SubsystemBase {
   private double[] tagpose, botpose; 
   private int pipeline; 
 
-  private SwerveSubsystem swerve = new SwerveSubsystem();
   //trajectory fields
   private Trajectory trajectory;
   HashMap<Double, Pose2d> poses; 
@@ -107,11 +107,11 @@ public class LimeLight extends SubsystemBase {
       //set tag pose as the current origin 
       //origin = this.getTagPose();
       if (this.getTv() == 1) {
-          swerve.resetOdometry(swerve.getPose()); //sets origin to tag pose 
+          RobotContainer.m_SwerveSubsystem.resetOdometry(RobotContainer.m_SwerveSubsystem.getPose()); //sets origin to tag pose 
   
           trajectory = TrajectoryGenerator.generateTrajectory(
               // robot pose -> target space 
-              swerve.getPose(),
+              RobotContainer.m_SwerveSubsystem.getPose(),
               // Pass through no interior points 
               List.of(),
               // End at apriltag pose 

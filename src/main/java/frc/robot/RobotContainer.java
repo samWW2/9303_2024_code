@@ -10,13 +10,20 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.SwerveSubsystem;
 
+import java.util.List;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.GoalEndState;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.PS5Controller;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -26,6 +33,21 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class RobotContainer {
+
+  private Command visionAuto(){
+      List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(
+        new Pose2d(1.5, 5.5, Rotation2d.fromDegrees(0)),
+        new Pose2d(3.0, 5.5, Rotation2d.fromDegrees(0)));
+
+        PathPlannerPath path = new PathPlannerPath(
+        bezierPoints,
+        new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI), 
+        new GoalEndState(0.0, Rotation2d.fromDegrees(-90)));
+
+     path.preventFlipping =true;
+     m_SwerveSubsystem.resetOdometry(path.getPreviewStartingHolonomicPose());
+    return AutoBuilder.followPath(path);
+  }
 
   private Command Auto1(){
     m_SwerveSubsystem.resetOdometry(PathPlannerAuto.getStaringPoseFromAutoFile("Auto 1"));
@@ -64,9 +86,7 @@ public class RobotContainer {
 
 
   /* Subsystems */
-  private final SwerveSubsystem m_SwerveSubsystem = new SwerveSubsystem();
-
-
+  public static final SwerveSubsystem m_SwerveSubsystem = new SwerveSubsystem();
 
   
   
@@ -93,6 +113,7 @@ public class RobotContainer {
     chooser.addOption("Auto 3", Auto3());
     chooser.addOption("Auto 4", Auto4());
     chooser.addOption("Auto 5", Auto5());
+    chooser.addOption("vision auto", visionAuto());
     SmartDashboard.putData(chooser);
    
   }

@@ -67,7 +67,6 @@ public class FollowTagTrajectory extends Command{
       swerve::setModuleStates,
       swerve);
         
-      // return swerveControllerCommand;
       return new InstantCommand(() -> swerve.resetOdometry(trajectory.getInitialPose())).andThen(swerveControllerCommand);
   }
   
