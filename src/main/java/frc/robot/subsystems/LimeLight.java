@@ -1,10 +1,11 @@
 package frc.robot.subsystems;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-import edu.wpi.first.apriltag.AprilTagPoseEstimator;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
@@ -13,8 +14,10 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
+import frc.robot.helpers.LimelightHelpers;
 
 public class LimeLight extends SubsystemBase {
 
@@ -33,9 +36,11 @@ public class LimeLight extends SubsystemBase {
 
   //trajectory fields
   private Trajectory trajectory;
+
   HashMap<Double, Pose2d> poses; 
 
-  public LimeLight() {
+  public LimeLight() 
+  {
       System.out.println("Limelight object initialized");
 
       nInstance = NetworkTableInstance.getDefault();
@@ -47,13 +52,14 @@ public class LimeLight extends SubsystemBase {
       tid = table.getEntry("tid");
       tagpose = table.getEntry("targetpose_robotspace").getDoubleArray(new double[6]); 
       botpose = table.getEntry("robotpose_targetspace").getDoubleArray(new double[6]); 
-      poses = new HashMap<Double, Pose2d>(); 
+      poses = new HashMap<Double, Pose2d>();
   
   }
 
   public Pose2d getTagPose() { 
-      return new Pose2d(-botpose[0], -botpose[1], new Rotation2d(180));
+      return LimelightHelpers.getBotPose2d("limelight");
   }
+
 
   public void printTargetPoses() {
       System.out.println(Arrays.asList(poses));
@@ -87,8 +93,14 @@ public class LimeLight extends SubsystemBase {
       this.pipeline = pipeline;
       table.getEntry("pipeline").setNumber(pipeline);
       System.out.println("Pipeline changed to " + pipeline); 
-  } 
-
+  }
+ 
+  @Override
+  public void periodic() {
+    SmartDashboard.putNumber("x value", getTagPose().getX());
+    SmartDashboard.putNumber("y value", getTagPose().getY());
+      super.periodic();
+  }
   public void mapOriginPairs() {
       //initialize dictionary 
       if (this.getTv() == 1) {
@@ -110,11 +122,8 @@ public class LimeLight extends SubsystemBase {
           RobotContainer.m_SwerveSubsystem.resetOdometry(RobotContainer.m_SwerveSubsystem.getPose()); //sets origin to tag pose 
   
           trajectory = TrajectoryGenerator.generateTrajectory(
-              // robot pose -> target space 
               RobotContainer.m_SwerveSubsystem.getPose(),
-              // Pass through no interior points 
               List.of(),
-              // End at apriltag pose 
               this.getTagPose(),
               config);
 

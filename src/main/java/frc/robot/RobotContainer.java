@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.TeleopSwerve;
+import frc.robot.subsystems.LimeLight;
 import frc.robot.subsystems.SwerveSubsystem;
 
 import java.util.List;
@@ -36,17 +37,22 @@ public class RobotContainer {
 
   private Command visionAuto(){
       List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(
-        new Pose2d(1.5, 5.5, Rotation2d.fromDegrees(0)),
-        new Pose2d(3.0, 5.5, Rotation2d.fromDegrees(0)));
+        m_SwerveSubsystem.getPose(),
+        new Pose2d(5.8, -2.5, Rotation2d.fromDegrees(0)));
 
         PathPlannerPath path = new PathPlannerPath(
         bezierPoints,
         new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI), 
-        new GoalEndState(0.0, Rotation2d.fromDegrees(-90)));
+        new GoalEndState(0.0, Rotation2d.fromDegrees(0)));
 
      path.preventFlipping =true;
      m_SwerveSubsystem.resetOdometry(path.getPreviewStartingHolonomicPose());
     return AutoBuilder.followPath(path);
+  }
+  private Command testAuto(){
+       PathPlannerPath path = PathPlannerPath.fromPathFile("Work");
+       path.preventFlipping =true;
+       return AutoBuilder.followPath(path);
   }
 
   private Command Auto1(){
@@ -87,7 +93,7 @@ public class RobotContainer {
 
   /* Subsystems */
   public static final SwerveSubsystem m_SwerveSubsystem = new SwerveSubsystem();
-
+  private final LimeLight vision = new LimeLight();
   
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -114,6 +120,7 @@ public class RobotContainer {
     chooser.addOption("Auto 4", Auto4());
     chooser.addOption("Auto 5", Auto5());
     chooser.addOption("vision auto", visionAuto());
+    chooser.addOption("test", testAuto());
     SmartDashboard.putData(chooser);
    
   }

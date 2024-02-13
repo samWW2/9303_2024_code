@@ -37,7 +37,6 @@ public class SwerveSubsystem extends SubsystemBase {
   public SwerveSubsystem() {
     //instantiates new pigeon gyro, wipes it, and zeros it
     gyro = new AHRS(SPI.Port.kMXP);
-    // gyro.configFactoryDefault();
     zeroGyro();
     
     //Creates all four swerve modules into a swerve drive
@@ -176,8 +175,8 @@ public class SwerveSubsystem extends SubsystemBase {
   public Rotation2d getYaw() {
     //fancy if else loop again
     return (Constants.SwerveConstants.invertNavx)
-        ? Rotation2d.fromDegrees(360 - gyro.getYaw())
-        : Rotation2d.fromDegrees(gyro.getYaw() + Constants.SwerveConstants.degreesOffSet);
+        ? Rotation2d.fromDegrees(-(360 - gyro.getYaw()))
+        : Rotation2d.fromDegrees(-(gyro.getYaw() + Constants.SwerveConstants.degreesOffSet));
   }
 
  
@@ -217,9 +216,9 @@ public class SwerveSubsystem extends SubsystemBase {
   public void periodic() {
         swerveOdometry.update(getYaw(), getPositions());
     field.setRobotPose(getPose());
-
     SmartDashboard.putNumber("gyro yaw",  getYaw().getDegrees());
-
+    SmartDashboard.putNumber("robot pose x", getPose().getX());
+    SmartDashboard.putNumber("robot pose y", getPose().getY());
     for (SwerveModule mod : mSwerveMods) {
       SmartDashboard.putNumber(
           "Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
