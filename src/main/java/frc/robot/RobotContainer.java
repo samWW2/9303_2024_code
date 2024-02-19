@@ -38,7 +38,7 @@ public class RobotContainer {
   private Command visionAuto(){
       List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(
         m_SwerveSubsystem.getPose(),
-        new Pose2d(5.8, -2.5, Rotation2d.fromDegrees(0)));
+        vision.getTagPose());
 
         PathPlannerPath path = new PathPlannerPath(
         bezierPoints,

@@ -57,10 +57,11 @@ public class LimeLight extends SubsystemBase {
   }
 
   public Pose2d getTagPose() { 
-      return LimelightHelpers.getBotPose2d("limelight");
+      return new Pose2d(getLLData().getY()+2.5, getLLData().getX(), Rotation2d.fromDegrees(0));
   }
-
-
+  public Pose2d getLLData(){
+    return LimelightHelpers.getBotPose2d("limelight");
+  }
   public void printTargetPoses() {
       System.out.println(Arrays.asList(poses));
   }

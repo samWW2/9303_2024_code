@@ -25,10 +25,10 @@ public final class Constants {
 
     public static final double degreesOffSet = 0;
 
-    private static final double mod0OffSet = -360 * 0;
-    private static final double mod1OffSet = -360 * 0;
-    private static final double mod2OffSet = -360 * 0;
-    private static final double mod3OffSet = -360 * 0;
+    private static final double mod0OffSet = 360 * 0;
+    private static final double mod1OffSet = 360 * 0;
+    private static final double mod2OffSet = 360 * 0;
+    private static final double mod3OffSet = 360 * 0;
 
 
 
@@ -48,7 +48,7 @@ public final class Constants {
 
     public static final double driveGearRatio = (6.75 / 1.0); // 6.75:1 L2 Mk4 Modules
     //L1 is 8.14:1, L2 is 6.75:1, L3 is 6.12:1, L4 is 5.14:1
-    public static final double angleGearRatio = ((150/7)/ 1.0); // 12.8:1 MK4 SDS Modules
+    public static final double angleGearRatio = ((150/7)/1); // 12.8:1 MK4 SDS Modules
 
     public static final SwerveDriveKinematics swerveKinematics =
     new SwerveDriveKinematics(
@@ -92,8 +92,8 @@ public final class Constants {
     public static final double maxAngularVelocity = 3; //what are these units? //11.5
 
     /* Neutral Modes */ 
-    public static final IdleMode angleNeutralMode = IdleMode.kBrake; //change to break
-    public static final IdleMode driveNeutralMode = IdleMode.kBrake; //change to break
+    public static final IdleMode angleNeutralMode = IdleMode.kCoast; //change to break
+    public static final IdleMode driveNeutralMode = IdleMode.kCoast; //change to break
 
     /* Motor Inverts */
     public static final boolean driveInvert = false;

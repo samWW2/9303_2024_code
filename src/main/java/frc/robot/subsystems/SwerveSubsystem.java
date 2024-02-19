@@ -99,6 +99,7 @@ public class SwerveSubsystem extends SubsystemBase {
   for (SwerveModule mod : mSwerveMods) {
     mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
   }
+    SmartDashboard.putNumber("set point ", swerveModuleStates[0].angle.getDegrees());
 }
 
   /* Used by SwerveControllerCommand in Auto */
@@ -106,7 +107,7 @@ public class SwerveSubsystem extends SubsystemBase {
     SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.SwerveConstants.maxSpeed);
 
     for (SwerveModule mod : mSwerveMods) {
-      mod.setDesiredState(desiredStates[mod.moduleNumber], false);
+      mod.setDesiredState(desiredStates[mod.moduleNumber], true);
     }
   }
 
@@ -208,6 +209,15 @@ public class SwerveSubsystem extends SubsystemBase {
       drive(new Translation2d(0, 0), 0.0, true, false);
       return true;}
     
+  }
+  public double getAngle(SwerveModule mod){
+    if(mod.getState().angle.getDegrees() > 360){
+      return mod.getState().angle.getDegrees() -360;
+  }
+  else if(mod.getState().angle.getDegrees() < 0){
+       return mod.getState().angle.getDegrees() + 360;
+  }
+    return mod.getState().angle.getDegrees();
   }
 
 
