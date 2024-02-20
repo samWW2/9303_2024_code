@@ -7,6 +7,8 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import frc.robot.Constants;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Climber extends SubsystemBase {
@@ -14,6 +16,7 @@ public class Climber extends SubsystemBase {
   private final CANSparkMax climberRight;
   private final RelativeEncoder leftEnc;
   private final RelativeEncoder rightEnc;
+  private DigitalInput hallEffectSensor;
 
   
   public Climber() {
@@ -25,6 +28,8 @@ public class Climber extends SubsystemBase {
     leftEnc.setPositionConversionFactor(Constants.ClimberConstants.encoderPositionConversionFactor);
     rightEnc = climberRight.getEncoder();
     rightEnc.setPositionConversionFactor(Constants.ClimberConstants.encoderPositionConversionFactor);
+
+    hallEffectSensor = new DigitalInput(Constants.ClimberConstants.digInputHESport);
   }
   public void setMotors(double speed){
     climberLeft.set(speed);
@@ -39,6 +44,12 @@ public class Climber extends SubsystemBase {
   }
   public double getRightPositionCm(){
     return rightEnc.getPosition();
+  }
+  public boolean isDetected(){
+    boolean isMagneticFieldDetected = hallEffectSensor.get();
+     if (isMagneticFieldDetected) { System.out.println("Magnetic field detected!");}
+     else { System.out.println("No magnetic field detected.");}
+     return isMagneticFieldDetected;
   }
 
   @Override

@@ -182,6 +182,14 @@ public final class Constants {
 
   }
 
+  public static final class ClimberConstants{
+    public static final int leftClimberID = 14;
+    public static final int rightClimberID = 15;
+    public static final int digInputHESport = 0;
+    public static final IdleMode mode = IdleMode.kBrake;
+    public static final double encoderPositionConversionFactor = 0;
+  }
+
   public static final class AutoConstants {
     public static final double kMaxSpeedMetersPerSecond = 1.75;
     public static final double kMaxAccelerationMetersPerSecondSquared = 2;

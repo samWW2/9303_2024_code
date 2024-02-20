@@ -91,7 +91,6 @@ public class SwerveModule {
         //have to be sad with falcons but thats what you get for giving money to Tony
         desiredState = SwerveModuleState.optimize(desiredState, getState().angle);
         
-        
         setAngle(desiredState);
         setSpeed(desiredState, isOpenLoop);
     }
@@ -114,7 +113,6 @@ public class SwerveModule {
 
     private void setAngle(SwerveModuleState desiredState){
         //Prevent rotating module if speed is less then 1%. Prevents Jittering.
-        //the ? and : are a shorthand for an if-else loop
         Rotation2d angle = (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.SwerveConstants.maxSpeed * 0.01)) ? lastAngle : desiredState.angle; 
         
         angleController.setReference(angle.getDegrees(), ControlType.kPosition);

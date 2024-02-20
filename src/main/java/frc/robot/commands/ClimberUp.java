@@ -5,28 +5,35 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.Climber;
 
 public class ClimberUp extends Command {
-  /** Creates a new ClimberUp. */
-  public ClimberUp() {
-    // Use addRequirements() here to declare subsystem dependencies.
+  private final Climber climber;
+  private final double speed;
+  public ClimberUp(Climber climber,double speed) {
+    this.climber = climber;
+    this.speed=speed;
+    addRequirements(climber);
   }
 
-  // Called when the command is initially scheduled.
   @Override
   public void initialize() {}
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    climber.setMotors(speed);
+  }
 
-  // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    climber.stop();
+  }
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if(climber.isDetected()){
+      return true;
+    }
     return false;
   }
 }
