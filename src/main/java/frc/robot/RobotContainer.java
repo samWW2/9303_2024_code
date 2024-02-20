@@ -10,7 +10,9 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.ClimberUp;
 import frc.robot.commands.TeleopSwerve;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.LimeLight;
 import frc.robot.subsystems.SwerveSubsystem;
 
@@ -25,6 +27,7 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PS5Controller;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -80,6 +83,7 @@ public class RobotContainer {
   }
   private SendableChooser<Command> chooser = new SendableChooser<>();
   private final PS5Controller m_PS5Controller = new PS5Controller(0);
+  private final Joystick joystick = new Joystick(1);
 
   /* Drive Controls */
   private final int translationAxis = PS5Controller.Axis.kLeftY.value;
@@ -87,12 +91,15 @@ public class RobotContainer {
   private final int rotationAxis = PS5Controller.Axis.kRightX.value;
   
   private final Trigger robotCentric = new JoystickButton(m_PS5Controller,PS5Controller.Button.kSquare.value);
-  private final Trigger xButton = new JoystickButton(m_PS5Controller, PS5Controller.Button.kCross.value);
   private final Trigger oButton = new JoystickButton(m_PS5Controller, PS5Controller.Button.kCircle.value);
+  private final JoystickButton climberUpButton = new JoystickButton(joystick, 1);
+  private final JoystickButton climberDownButton = new JoystickButton(joystick, 2);
+
 
 
   /* Subsystems */
   public static final SwerveSubsystem m_SwerveSubsystem = new SwerveSubsystem();
+  public static final Climber climber = new Climber();
   private final LimeLight vision = new LimeLight();
   
   
@@ -112,7 +119,10 @@ public class RobotContainer {
  
   private void configureBindings() {
     oButton.onTrue(new InstantCommand(() -> m_SwerveSubsystem.zeroGyro()));
-    xButton.onTrue(new InstantCommand(() -> m_SwerveSubsystem.setWheelsToX()));
+    climberUpButton.onTrue(new ClimberUp(climber, 0.5));
+    climberUpButton.onFalse(new InstantCommand(() -> climber.stop()));
+    climberDownButton.onTrue(new ClimberUp(climber, -0.5));
+    climberDownButton.onFalse(new InstantCommand(() -> climber.stop()));
     chooser.setDefaultOption("no auto", NullAuto());
     chooser.addOption("Auto 1", Auto1());
     chooser.addOption("Auto 2", Auto2());
