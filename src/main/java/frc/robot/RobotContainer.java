@@ -10,13 +10,23 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-
 import frc.robot.commands.TeleopSwerve;
+import frc.robot.subsystems.LimeLight;
 import frc.robot.subsystems.SwerveSubsystem;
 
+import java.util.List;
 
-import edu.wpi.first.wpilibj.PS4Controller;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.GoalEndState;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.PS5Controller;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
@@ -24,27 +34,66 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
-  
 
+  private Command visionAuto(){
+      List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(
+        m_SwerveSubsystem.getPose(),
+        new Pose2d(5.8, -2.5, Rotation2d.fromDegrees(0)));
+
+        PathPlannerPath path = new PathPlannerPath(
+        bezierPoints,
+        new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI), 
+        new GoalEndState(0.0, Rotation2d.fromDegrees(0)));
+
+     path.preventFlipping =true;
+     m_SwerveSubsystem.resetOdometry(path.getPreviewStartingHolonomicPose());
+    return AutoBuilder.followPath(path);
+  }
+  private Command testAuto(){
+       PathPlannerPath path = PathPlannerPath.fromPathFile("Work");
+       path.preventFlipping =true;
+       return AutoBuilder.followPath(path);
+  }
+
+  private Command Auto1(){
+    m_SwerveSubsystem.resetOdometry(PathPlannerAuto.getStaringPoseFromAutoFile("Auto 1"));
+    return AutoBuilder.buildAuto("Auto 1");
+  }
+   private Command Auto2(){
+    m_SwerveSubsystem.resetOdometry(PathPlannerAuto.getStaringPoseFromAutoFile("Auto 2"));
+    return AutoBuilder.buildAuto("Auto 2");
+  }
+   private Command Auto3(){
+    m_SwerveSubsystem.resetOdometry(PathPlannerAuto.getStaringPoseFromAutoFile("Auto 3"));
+    return AutoBuilder.buildAuto("Auto 3");
+  }
+   private Command Auto4(){
+    m_SwerveSubsystem.resetOdometry(PathPlannerAuto.getStaringPoseFromAutoFile("Auto 4"));
+    return AutoBuilder.buildAuto("Auto 4");
+  }
+   private Command Auto5(){
+    m_SwerveSubsystem.resetOdometry(PathPlannerAuto.getStaringPoseFromAutoFile("Auto 5"));
+    return AutoBuilder.buildAuto("Auto 5");
+  }
+  public Command NullAuto(){
+    return null;
+  }
+  private SendableChooser<Command> chooser = new SendableChooser<>();
   private final PS5Controller m_PS5Controller = new PS5Controller(0);
 
-
   /* Drive Controls */
-  private final int translationAxis = PS4Controller.Axis.kLeftY.value;
-  private final int strafeAxis = PS4Controller.Axis.kLeftX.value;
-  private final int rotationAxis = PS4Controller.Axis.kRightX.value;
+  private final int translationAxis = PS5Controller.Axis.kLeftY.value;
+  private final int strafeAxis = PS5Controller.Axis.kLeftX.value;
+  private final int rotationAxis = PS5Controller.Axis.kRightX.value;
   
-  private final Trigger robotCentric = new JoystickButton(m_PS5Controller,PS4Controller.Button.kSquare.value);
-  private final Trigger xButton = new JoystickButton(m_PS5Controller, PS4Controller.Button.kCross.value);
-  private final Trigger oButton = new JoystickButton(m_PS5Controller, PS4Controller.Button.kCircle.value);
+  private final Trigger robotCentric = new JoystickButton(m_PS5Controller,PS5Controller.Button.kSquare.value);
+  private final Trigger xButton = new JoystickButton(m_PS5Controller, PS5Controller.Button.kCross.value);
+  private final Trigger oButton = new JoystickButton(m_PS5Controller, PS5Controller.Button.kCircle.value);
 
 
   /* Subsystems */
-  private final SwerveSubsystem m_SwerveSubsystem = new SwerveSubsystem();
-
-
-
+  public static final SwerveSubsystem m_SwerveSubsystem = new SwerveSubsystem();
+  private final LimeLight vision = new LimeLight();
   
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -64,11 +113,23 @@ public class RobotContainer {
   private void configureBindings() {
     oButton.onTrue(new InstantCommand(() -> m_SwerveSubsystem.zeroGyro()));
     xButton.onTrue(new InstantCommand(() -> m_SwerveSubsystem.setWheelsToX()));
+    chooser.setDefaultOption("no auto", NullAuto());
+    chooser.addOption("Auto 1", Auto1());
+    chooser.addOption("Auto 2", Auto2());
+    chooser.addOption("Auto 3", Auto3());
+    chooser.addOption("Auto 4", Auto4());
+    chooser.addOption("Auto 5", Auto5());
+    chooser.addOption("vision auto", visionAuto());
+    chooser.addOption("test", testAuto());
+    SmartDashboard.putData(chooser);
    
   }
 
  
   public Command getAutonomousCommand() {
-    return null;
+    // PathPlannerPath path = PathPlannerPath.fromPathFile("Back Left 45");
+    // m_SwerveSubsystem.resetOdometry(path.getPreviewStartingHolonomicPose());
+    // return AutoBuilder.followPath(path);
+    return chooser.getSelected();
   }
 }

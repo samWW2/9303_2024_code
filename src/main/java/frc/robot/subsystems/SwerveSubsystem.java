@@ -5,9 +5,12 @@
 package frc.robot.subsystems;
 
 import org.littletonrobotics.junction.AutoLogOutput;
-import org.littletonrobotics.junction.Logger;
 
 import com.kauailabs.navx.frc.AHRS;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -17,6 +20,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -35,7 +39,6 @@ public class SwerveSubsystem extends SubsystemBase {
   public SwerveSubsystem() {
     //instantiates new pigeon gyro, wipes it, and zeros it
     gyro = new AHRS(SPI.Port.kMXP);
-    // gyro.configFactoryDefault();
     zeroGyro();
     
     //Creates all four swerve modules into a swerve drive
@@ -53,18 +56,44 @@ public class SwerveSubsystem extends SubsystemBase {
     //puts out the field
     field = new Field2d();
     SmartDashboard.putData("Field", field);
+
+     // Configure AutoBuilder last
+    AutoBuilder.configureHolonomic(
+            this::getPose, // Robot pose supplier
+            this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
+            this::getSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+            this::driveRobotRelitive, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+            new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
+                    new PIDConstants(4.0, 0.0, 0.0), // Translation PID constants
+                    new PIDConstants(0.01, 0.0, 0.0), // Rotation PID constants
+                    3, // Max module speed, in m/s
+                    0.4, // Drive base radius in meters. Distance from robot center to furthest module.
+                    new ReplanningConfig() // Default path replanning config. See the API for the options here
+            ),
+            () -> {
+              // Boolean supplier that controls when the path will be mirrored for the red alliance
+              // This will flip the path being followed to the red side of the field.
+              // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+              var alliance = DriverStation.getAlliance();
+              if (alliance.isPresent()) {
+                return alliance.get() == DriverStation.Alliance.Red;
+              }
+              return false;
+            },
+            this // Reference to this subsystem to set requirements
+    );
   }
 
   public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop)
   //takes the coordinate on field wants to go to, the rotation of it, whether or not in field relative mode, and if in open loop control
   {
-    SwerveModuleState[] swerveModuleStates = //1,0,3,2 - fr,fl,br,bl
+    SwerveModuleState[] swerveModuleStates =
       Constants.SwerveConstants.swerveKinematics.toSwerveModuleStates(
           fieldRelative
               ? ChassisSpeeds.fromFieldRelativeSpeeds(
                   -translation.getX(), translation.getY(), rotation, getYaw())
               : new ChassisSpeeds(-translation.getX(), translation.getY(), rotation));
-              //Logger.recordOutput("Swerve Rotation", rotation);
   //sets to top speed if above top speed
   SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.SwerveConstants.maxSpeed);
 
@@ -81,10 +110,9 @@ public class SwerveSubsystem extends SubsystemBase {
     for (SwerveModule mod : mSwerveMods) {
       mod.setDesiredState(desiredStates[mod.moduleNumber], false);
     }
-    
   }
 
-  @AutoLogOutput(key="Odometry/Robot")
+  @AutoLogOutput(key="odometry/Robot")
   public Pose2d getPose() {
     return swerveOdometry.getPoseMeters();
   }
@@ -93,6 +121,24 @@ public class SwerveSubsystem extends SubsystemBase {
     swerveOdometry.resetPosition(getYaw(), getPositions(), pose);
   }
 
+  public ChassisSpeeds getSpeeds() {
+    return Constants.SwerveConstants.swerveKinematics.toChassisSpeeds(getStates());
+  }
+
+  public void driveRobotRelitive(ChassisSpeeds targetSpeed)
+  // takes the coordinate on field wants to go to, the rotation of it, whether or
+  // not in field relative mode, and if in open loop control
+  {
+    SwerveModuleState[] swerveModuleStates = Constants.SwerveConstants.swerveKinematics.toSwerveModuleStates(targetSpeed,
+        new Translation2d());
+    // sets to top speed if above top speed
+    SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.SwerveConstants.maxSpeed);
+
+    // set states for all 4 modules
+    for (SwerveModule mod : mSwerveMods) {
+      mod.setDesiredState(swerveModuleStates[mod.moduleNumber], false);// MIGHT NEED TO CHANGE
+    }
+  }
   public void setWheelsToX() {
     setModuleStates(new SwerveModuleState[] {
       // front left
@@ -115,7 +161,6 @@ public class SwerveSubsystem extends SubsystemBase {
     return states;
   }
 
-  @AutoLogOutput
   public SwerveModulePosition[] getPositions(){
     SwerveModulePosition[] positions = new SwerveModulePosition[4];
     for(SwerveModule mod : mSwerveMods){
@@ -133,9 +178,11 @@ public class SwerveSubsystem extends SubsystemBase {
   public Rotation2d getYaw() {
     //fancy if else loop again
     return (Constants.SwerveConstants.invertNavx)
-        ? Rotation2d.fromDegrees(360 - gyro.getYaw())
-        : Rotation2d.fromDegrees(gyro.getYaw() + Constants.SwerveConstants.degreesOffSet);
+        ? Rotation2d.fromDegrees(-(360 - gyro.getYaw()))
+        : Rotation2d.fromDegrees(-(gyro.getYaw() + Constants.SwerveConstants.degreesOffSet));
   }
+
+ 
 
   public boolean AutoBalance(){
     double roll_error = gyro.getPitch();//the angle of the robot
@@ -172,10 +219,9 @@ public class SwerveSubsystem extends SubsystemBase {
   public void periodic() {
         swerveOdometry.update(getYaw(), getPositions());
     field.setRobotPose(getPose());
-    
-    Logger.recordOutput("yaw", getYaw().getDegrees());
     SmartDashboard.putNumber("gyro yaw",  getYaw().getDegrees());
-    
+    SmartDashboard.putNumber("robot pose x", getPose().getX());
+    SmartDashboard.putNumber("robot pose y", getPose().getY());
     for (SwerveModule mod : mSwerveMods) {
       SmartDashboard.putNumber(
           "Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());

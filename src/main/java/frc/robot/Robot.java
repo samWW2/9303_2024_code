@@ -19,8 +19,6 @@ import frc.lib.CTREConfigs;
  * project.
  */
 public class Robot extends LoggedRobot {
-  
-  
   public static CTREConfigs ctreConfigs;
   private Command m_autonomousCommand;
 
@@ -32,8 +30,7 @@ public class Robot extends LoggedRobot {
    */
   @Override
   public void robotInit() {
-    Logger.recordMetadata("ProjectName", "MyProject");
-    Logger.addDataReceiver(new NT4Publisher());
+    Logger.addDataReceiver(new NT4Publisher()); 
     Logger.start();
     ctreConfigs = new CTREConfigs();
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
