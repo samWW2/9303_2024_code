@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.TeleopSwerve;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LimeLight;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -92,10 +93,12 @@ public class RobotContainer {
   private final Trigger xButton = new JoystickButton(m_PS5Controller, PS5Controller.Button.kCross.value);
   private final Trigger oButton = new JoystickButton(m_PS5Controller, PS5Controller.Button.kCircle.value);
   private final Trigger shootButton = new JoystickButton(m_Joystick, 1);
+  private final Trigger intakeButton = new JoystickButton(m_Joystick, 2);
 
   /* Subsystems */
   public static final SwerveSubsystem m_SwerveSubsystem = new SwerveSubsystem();
   public static final ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
+  public static final Intake m_intake = new Intake();
   private final LimeLight vision = new LimeLight();
   
   
@@ -114,8 +117,9 @@ public class RobotContainer {
 
  
   private void configureBindings() {
-    shootButton.onTrue(new InstantCommand(()-> m_ShooterSubsystem.setspeedCommand(5)));
-    shootButton.onFalse(new InstantCommand(()-> m_ShooterSubsystem.setspeedCommand(0)));
+    shootButton.onTrue(new InstantCommand(()-> m_ShooterSubsystem.setshootspeedCommand(5,8)).andThen(m_intake.setshootintakemotors(1)));
+    shootButton.onFalse(new InstantCommand(()-> m_ShooterSubsystem.setshootspeedCommand(0,0)).andThen(m_intake.setshootintakemotors(0)));
+    intakeButton.onTrue(new InstantCommand(()->m_intake.setcolletionintakemotors(1)));
     oButton.onTrue(new InstantCommand(() -> m_SwerveSubsystem.zeroGyro()));
     xButton.onTrue(new InstantCommand(() -> m_SwerveSubsystem.setWheelsToX()));
     chooser.setDefaultOption("no auto", NullAuto());
