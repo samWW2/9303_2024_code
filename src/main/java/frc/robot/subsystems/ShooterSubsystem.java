@@ -21,24 +21,33 @@ public class ShooterSubsystem extends SubsystemBase {
   /** Creates a new ShooterSubsystem. */
   public ShooterSubsystem() {
     topshootmotor.setInverted(true);
-    bottomshootmotor.follow(topshootmotor);
+    
   }
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("shootmotorspeed",getVelocity());
+    SmartDashboard.putNumber("topshootmotorspeed",gettopVelocity());
+    SmartDashboard.putNumber("bottomshootmotorspeed",getbottomVelocity());
+  }
+  public void setshootmotor(double topshootingSpeed,double bottomshootingSpeed){
+    topshootmotor.set(shooterSpeedController.calculate(gettopVelocity(),topshootingSpeed));
+    bottomshootmotor.set(shooterSpeedController.calculate(getbottomVelocity(),bottomshootingSpeed));
+
+  }
+  public Command setshootspeedCommand(double topshootspeed,double bottomshootspeed){
+    return new RunCommand(()-> setshootmotor(topshootspeed,bottomshootspeed));
   }
 
-  public Command setspeedCommand(double shootingSpeed){
-    return new RunCommand(()-> topshootmotor.set(shooterSpeedController.calculate(getVelocity(),shootingSpeed)));
-  }
   public boolean isatSetpoint(){
     return shooterSpeedController.atSetpoint();
   }
   public void stopmotors(){
     topshootmotor.stopMotor();
   }
-  private double getVelocity(){
+  private double gettopVelocity(){
     return topshootmotor.getEncoder().getVelocity();
+  }
+  private double getbottomVelocity(){
+    return bottomshootmotor.getEncoder().getVelocity();
   }
 }
