@@ -27,6 +27,7 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PS5Controller;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -83,7 +84,7 @@ public class RobotContainer {
   }
   private SendableChooser<Command> chooser = new SendableChooser<>();
   private final PS5Controller m_PS5Controller = new PS5Controller(0);
-  private final Joystick joystick = new Joystick(1);
+  private final GenericHID joystick = new GenericHID(1);
 
   /* Drive Controls */
   private final int translationAxis = PS5Controller.Axis.kLeftY.value;

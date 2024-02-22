@@ -16,7 +16,6 @@ public class ShooterSubsystem extends SubsystemBase {
   private final CANSparkMax bottomshootmotor = new CANSparkMax(2, MotorType.kBrushless);
   private final PIDController shooterSpeedController = new PIDController(0, 0, 0);
 
-  /** Creates a new ShooterSubsystem. */
   public ShooterSubsystem() {
     topshootmotor.setInverted(true);
     bottomshootmotor.follow(topshootmotor);
