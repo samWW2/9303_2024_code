@@ -140,7 +140,6 @@ public class LimeLight extends SubsystemBase {
     SmartDashboard.putNumber("y value", getTagPose().getY());
     Logger.recordOutput("DetectedAprilTags", DetectedAprilTagsPosesFromId(getDetectedAprilTagsId())); //TODO try the other one
     //TODO try in robotcontainer
-      super.periodic();
   }
   public void mapOriginPairs() {
       //initialize dictionary 
