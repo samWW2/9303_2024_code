@@ -23,8 +23,9 @@ public class Intake extends SubsystemBase {
   
 
   public Intake() {
-     this.intakemotor1= new CANSparkMax(2, MotorType.kBrushless);
-     this.intakemotor2= new CANSparkMax(3, MotorType.kBrushless);
+     this.intakemotor1= new CANSparkMax(45, MotorType.kBrushless);
+     this.intakemotor2= new CANSparkMax(50, MotorType.kBrushless);
+     intakemotor1.setInverted(true);
   }
 
   @Override
@@ -35,12 +36,10 @@ public class Intake extends SubsystemBase {
     intakemotor2.set(motorspeed);
   }
 
- public Command setcolletionintakemotors(double intakemotorspeed){
+ public Command setintakemotorspeed(double intakemotorspeed){
   return new RunCommand(()-> setintakemotors(intakemotorspeed));
  }
- public Command setshootintakemotors(double intakemotorspeed){
-  return new RunCommand(()-> setintakemotors(intakemotorspeed));
- }
+
 
   public void stopMotors() {
     intakemotor1.stopMotor();

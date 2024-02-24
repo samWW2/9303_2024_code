@@ -7,13 +7,18 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.ClimberUp;
+// import frc.robot.commands.ClimberUp;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.Climber;
-import frc.robot.subsystems.LimeLight;
+// import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Intake;
+// import frc.robot.subsystems.LimeLight;
+import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
 import java.util.List;
@@ -23,6 +28,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -39,20 +45,26 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class RobotContainer {
 
-  private Command visionAuto(){
-      List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(
-        m_SwerveSubsystem.getPose(),
-        vision.getTagPose());
+ 
 
-        PathPlannerPath path = new PathPlannerPath(
-        bezierPoints,
-        new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI), 
-        new GoalEndState(0.0, Rotation2d.fromDegrees(0)));
+  // private Command visionAuto(){
+  //     List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(
+  //       m_SwerveSubsystem.getPose(),
+  //       vision.getTagPose());
 
-     path.preventFlipping =true;
-     m_SwerveSubsystem.resetOdometry(path.getPreviewStartingHolonomicPose());
-    return AutoBuilder.followPath(path);
-  }
+  //       PathPlannerPath path = new PathPlannerPath(
+  //       bezierPoints,
+  //       new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI), 
+  //       new GoalEndState(0.0, Rotation2d.fromDegrees(0)));
+
+  //    path.preventFlipping =true;
+  //    m_SwerveSubsystem.resetOdometry(path.getPreviewStartingHolonomicPose());
+  //   return AutoBuilder.followPath(path);
+  // }
+  
+  // NamedCommands.registerCommand("autoBalance", swerve.autoBalanceCommand());
+  // NamedCommands.registerCommand("exampleCommand", exampleSubsystem.exampleCommand());
+  // NamedCommands.registerCommand("someOtherCommand", new SomeOtherCommand());
   private Command testAuto(){
        PathPlannerPath path = PathPlannerPath.fromPathFile("Work");
        path.preventFlipping =true;
@@ -91,21 +103,41 @@ public class RobotContainer {
   private final int strafeAxis = PS5Controller.Axis.kLeftX.value;
   private final int rotationAxis = PS5Controller.Axis.kRightX.value;
   
-  private final Trigger robotCentric = new JoystickButton(m_PS5Controller,PS5Controller.Button.kSquare.value);
+  private final Trigger robotCentric = new JoystickButton(m_PS5Controller,PS5Controller.Button.kCross.value);
   private final Trigger oButton = new JoystickButton(m_PS5Controller, PS5Controller.Button.kCircle.value);
-  private final JoystickButton climberUpButton = new JoystickButton(joystick, 1);
-  private final JoystickButton climberDownButton = new JoystickButton(joystick, 2);
+  // private final JoystickButton climberUpButton = new JoystickButton(joystick, 1);
+  // private final JoystickButton climberDownButton = new JoystickButton(joystick, 2);
+  private final Trigger intakeButtonIn = new JoystickButton(joystick,7); 
+  private final Trigger intakeButtonOut = new JoystickButton(joystick,1); 
+  private final Trigger shootAmpButton = new JoystickButton(joystick,6);
+  private final Trigger feederButton = new JoystickButton(joystick,5);
+  private final Trigger shootSpekerButton = new JoystickButton(joystick,8);
+  // private final Trigger climberDownButton = new JoystickButton(joystick,1); //7
+  // private final Trigger climberUpButton = new JoystickButton(joystick,2); //8
 
 
 
-  /* Subsystems */
-  public static final SwerveSubsystem m_SwerveSubsystem = new SwerveSubsystem();
-  public static final Climber climber = new Climber();
-  private final LimeLight vision = new LimeLight();
+
+private final SwerveSubsystem m_SwerveSubsystem;
+private final Intake m_intake;
+private  final Climber climber;
+private final ShooterSubsystem shootSub;
+// private final LimeLight vision;
+
   
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+       /* Subsystems */
+   m_SwerveSubsystem = new SwerveSubsystem();
+  m_intake = new Intake();
+  climber = new Climber();
+  // vision= new LimeLight();
+   shootSub= new ShooterSubsystem();
+
+   NamedCommands.registerCommand("SimpleName", new RunCommand(() -> m_intake.setintakemotors(0.5)));
+   NamedCommands.registerCommand("SimpleName", new RunCommand(() -> shootSub.setshootmotor(-0.35,0.65)));
+ 
     m_SwerveSubsystem.setDefaultCommand(
       new TeleopSwerve(
           m_SwerveSubsystem,
@@ -119,18 +151,34 @@ public class RobotContainer {
 
  
   private void configureBindings() {
+    intakeButtonIn.onTrue(new InstantCommand(() -> m_intake.setintakemotors(0.5)));
+    intakeButtonIn.onFalse(new InstantCommand(() -> m_intake.setintakemotors(0)));
+    intakeButtonOut.onTrue(new InstantCommand(() -> m_intake.setintakemotors(-0.5)));
+    intakeButtonOut.onFalse(new InstantCommand(() -> m_intake.setintakemotors(0)));
+    shootAmpButton.onTrue(new RunCommand(() -> shootSub.setshootmotorPercent(-0.3, 0.5)));
+    shootAmpButton.onFalse(new InstantCommand(() -> shootSub.setshootmotorPercent(0, 0)));
+    feederButton.onTrue(new ParallelCommandGroup(new InstantCommand(() -> m_intake.setintakemotors(-0.5)),new InstantCommand(() -> shootSub.setshootmotorPercent(0.3, -0.3))));
+    feederButton.onFalse(new ParallelCommandGroup(new InstantCommand(() -> m_intake.setintakemotors(0)),new InstantCommand(() -> shootSub.setshootmotorPercent(0, 0))));
+    shootSpekerButton.onTrue(new RunCommand(() -> shootSub.setshootmotorPercent(-0.35, 0.65)));
+    shootSpekerButton.onFalse(new InstantCommand(() -> shootSub.setshootmotorPercent(0, 0)));
+    // climberDownButton.onTrue(new InstantCommand(() -> climber.setMotors(-0.5)));
+    // climberDownButton.onFalse(new InstantCommand(() -> climber.setMotors(0)));
+    // climberUpButton.onTrue(new InstantCommand(() -> climber.setMotors(0.5)));
+    // climberUpButton.onFalse(new InstantCommand(() -> climber.setMotors(0)));
+
+
     oButton.onTrue(new InstantCommand(() -> m_SwerveSubsystem.zeroGyro()));
-    climberUpButton.onTrue(new ClimberUp(climber, 0.5));
-    climberUpButton.onFalse(new InstantCommand(() -> climber.stop()));
-    climberDownButton.onTrue(new ClimberUp(climber, -0.5));
-    climberDownButton.onFalse(new InstantCommand(() -> climber.stop()));
+    // climberUpButton.onTrue(new ClimberUp(climber, 0.5));
+    // climberUpButton.onFalse(new InstantCommand(() -> climber.stop()));
+    // climberDownButton.onTrue(new ClimberUp(climber, -0.5));
+    // climberDownButton.onFalse(new InstantCommand(() -> climber.stop()));
     chooser.setDefaultOption("no auto", NullAuto());
     chooser.addOption("Auto 1", Auto1());
     chooser.addOption("Auto 2", Auto2());
     chooser.addOption("Auto 3", Auto3());
     chooser.addOption("Auto 4", Auto4());
     chooser.addOption("Auto 5", Auto5());
-    chooser.addOption("vision auto", visionAuto());
+    // chooser.addOption("vision auto", visionAuto());
     chooser.addOption("test", testAuto());
     SmartDashboard.putData(chooser);
    

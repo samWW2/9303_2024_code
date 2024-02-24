@@ -23,7 +23,7 @@ import frc.lib.SwerveModuleConstants;
 public final class Constants {
   public static final class SwerveConstants{
 
-    public static final double degreesOffSet = 0;
+    public static final double degreesOffSet = 11;
 
     private static final double mod0OffSet = 360 * 0;
     private static final double mod1OffSet = 360 * 0;
@@ -38,8 +38,8 @@ public final class Constants {
     public static final boolean invertNavx = false;
 
     /* Drivetrain Constants */
-    public static final double trackWidth = Units.inchesToMeters(22.835);//to find
-    public static final double wheelBase = Units.inchesToMeters(22.835);//to find
+    public static final double trackWidth = 0.74;
+    public static final double wheelBase = 0.74;
     public static final double wheelDiameter = Units.inchesToMeters(3.937);
     public static final double wheelCircumference = wheelDiameter * Math.PI;
 
@@ -183,10 +183,10 @@ public final class Constants {
   }
 
   public static final class ClimberConstants{
-    public static final int leftClimberID = 14;
-    public static final int rightClimberID = 15;
+    public static final int leftClimberID = 27;
+    public static final int rightClimberID = 28;
     public static final int digInputHESport = 0;
-    public static final IdleMode mode = IdleMode.kBrake;
+    public static final IdleMode mode = IdleMode.kCoast;
     public static final double encoderPositionConversionFactor = 0;
   }
 

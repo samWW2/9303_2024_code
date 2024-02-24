@@ -176,8 +176,8 @@ public class SwerveSubsystem extends SubsystemBase {
   public Rotation2d getYaw() {
     //fancy if else loop again
     return (Constants.SwerveConstants.invertNavx)
-        ? Rotation2d.fromDegrees(-(360 - gyro.getYaw()))
-        : Rotation2d.fromDegrees(-(gyro.getYaw() + Constants.SwerveConstants.degreesOffSet));
+        ? Rotation2d.fromDegrees((360 - gyro.getYaw()))
+        : Rotation2d.fromDegrees((gyro.getYaw() + Constants.SwerveConstants.degreesOffSet));
   }
 
  

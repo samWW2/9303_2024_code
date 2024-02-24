@@ -61,7 +61,7 @@ public class TeleopSwerve extends Command {
         //rotation value times max spin speed
         rotationVal * Constants.SwerveConstants.maxAngularVelocity,
         //whether or not in field centric mode
-        false,
+        true,
         //open loop control
         true);
     //!m_robotCentricSupplier.getAsBoolean()
