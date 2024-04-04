@@ -5,6 +5,9 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+
+import java.util.function.BooleanSupplier;
+
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -46,7 +49,7 @@ public class ShooterSubsystem extends SubsystemBase {
     return new RunCommand(()-> setshootmotor(topshootspeed,bottomshootspeed));
   }
 
-  public boolean isatSetpoint(){
+  public Boolean isatSetpoint(){
     return shooterSpeedController.atSetpoint();
   }
   public void stopmotors(){
