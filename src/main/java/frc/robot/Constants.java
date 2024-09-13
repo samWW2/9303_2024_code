@@ -88,12 +88,12 @@ public final class Constants {
     public static final double angleConversionFactor = 360.0 / angleGearRatio;
 
     /* Swerve Profiling Values */
-    public static final double maxSpeed = 3; // meters per second //9 4.5
-    public static final double maxAngularVelocity = 2; //what are these units? //11.5
+    public static final double maxSpeed = 6; // meters per second //9 4.5
+    public static final double maxAngularVelocity =2 ; //what are these units? //11.5
 
     /* Neutral Modes */ 
-    public static final IdleMode angleNeutralMode = IdleMode.kBrake; //change to break
-    public static final IdleMode driveNeutralMode = IdleMode.kBrake; //change to break
+    public static final IdleMode angleNeutralMode = IdleMode.kCoast; //change to break
+    public static final IdleMode driveNeutralMode = IdleMode.kCoast; //change to break
 
     /* Motor Inverts */
     public static final boolean driveInvert = false;
@@ -108,7 +108,7 @@ public final class Constants {
     public static final class Mod0 { 
       public static final int driveMotorID = 1; 
       public static final int angleMotorID = 2; 
-      public static final int canCoderID = 9;
+      public static final int canCoderID = 9; //9
       public static final Rotation2d angleOffset = Rotation2d.fromDegrees(mod0OffSet);
     /* Angle Motor PID Values */
       public static final double angleKP = 0.01; //to tune
@@ -123,9 +123,9 @@ public final class Constants {
 
     /* Front Right Module - Module 1 */
     public static final class Mod1 {
-      public static final int driveMotorID = 7;
-      public static final int angleMotorID = 8;
-      public static final int canCoderID = 12;
+      public static final int driveMotorID = 3;
+      public static final int angleMotorID = 4;
+      public static final int canCoderID = 10; //10
       public static final Rotation2d angleOffset = Rotation2d.fromDegrees(mod1OffSet);
       /* Angle Motor PID Values */
       public static final double angleKP = 0.01; //to tune
@@ -140,9 +140,9 @@ public final class Constants {
 
     /* Back Left Module - Module 2 */
     public static final class Mod2 {
-      public static final int driveMotorID = 3;
-      public static final int angleMotorID = 4;
-      public static final int canCoderID = 10;
+      public static final int driveMotorID = 7;
+      public static final int angleMotorID = 8;
+      public static final int canCoderID = 12; //12
       public static final Rotation2d angleOffset = Rotation2d.fromDegrees(mod2OffSet);
       /* Angle Motor PID Values */
       public static final double angleKP = 0.01; //to tune
@@ -159,7 +159,7 @@ public final class Constants {
     public static final class Mod3 {
       public static final int driveMotorID = 5;
       public static final int angleMotorID = 6;
-      public static final int canCoderID = 11 ;
+      public static final int canCoderID = 11 ; //11
       public static final Rotation2d angleOffset = Rotation2d.fromDegrees(mod3OffSet);
         /* Angle Motor PID Values */
       public static final double angleKP = 0.01; //to tune
